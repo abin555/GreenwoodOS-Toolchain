@@ -1,0 +1,2 @@
+ALL_EMULATION_SOURCES += eelf_i386_gwos.c
+ALL_64_EMULATION_SOURCES += eelf_x86_64_gwos.c
