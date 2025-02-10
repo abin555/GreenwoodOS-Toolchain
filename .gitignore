@@ -1,0 +1,8 @@
+./src/build-binutils
+./src/build-gcc
+.#*
+#*
+*~
+#*#
+src/build-binutils/
+src/build-gcc/
