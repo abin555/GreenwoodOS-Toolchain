@@ -35,7 +35,7 @@ clean:
 	rm -rf ./src/build-gcc
 
 binutils-gwos: clean
-	TARGET=i386-gwos
+	TARGET=i386-elf-gwos
 	cd ./src; \
 	mkdir -p build-binutils
 	cp GWOS_configs/config.sub src/binutils/config.sub; \
