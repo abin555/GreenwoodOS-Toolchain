@@ -36,8 +36,11 @@ patch:
 	cd ./src/binutils/ && git apply ../../GWOS_configs/binutils_gwos.patch
 
 patch_docker:
-	cd ./build_docker && docker build -t gwos_toolchain .
-	docker run -v ./src/binutils/:/binutils gwos_toolchain
+	cd ./patch_docker && docker build -t gwos_patch .
+	docker run -v ./src/binutils/:/binutils gwos_patch
+
+build_toolchain_image:
+	cd ./build_docker && docker build -t gwos_toolchain_build .
 
 binutils-gwos:
 	TARGET=i386-gwos

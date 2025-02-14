@@ -7,14 +7,7 @@ RUN apt-get update && \
     g++ \
     libc6-dev \
     libtool \
-    xz-utils \
-	bison \
-	flex \
-	libgmp3-dev \
-	libmpc-dev \
-	libmpfr-dev \
-	texinfo
-
+    xz-utils
 RUN apt-get remove -y autotools-dev
 
 RUN mkdir /deps
@@ -25,3 +18,4 @@ RUN dpkg -i /deps/autotools*.deb
 RUN dpkg -i /deps/autoconf*.deb
 RUN dpkg -i /deps/automake*.deb
 
+CMD ["cd /binutils/ld && autoconf && automake"]
