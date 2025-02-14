@@ -34,26 +34,24 @@ clean:
 	rm -rf ./src/build-binutils
 	rm -rf ./src/build-gcc
 
-binutils-gwos: clean
-	TARGET=i386-elf-gwos
-	cd ./src; \
-	mkdir -p build-binutils
-	cp GWOS_configs/config.sub src/binutils/config.sub; \
-	cp GWOS_configs/bfd_config.bfd src/binutils/bfd/config.bfd; \
-	cp GWOS_configs/gas_configure.tgt src/binutils/gas/configure.tgt; \
-	cp GWOS_configs/ld_configure.tgt src/binutils/ld/configure.tgt; \
-	cp GWOS_configs/ld_emulparams_elf_i386_gwos.sh src/binutils/ld/emulparams/elf_i386_gwos.sh; \
-	cp GWOS_configs/ld_emulparams_elf_x86_64_gwos.sh src/binutils/ld/emulparams/elf_x86_64_gwos.sh; \
-	cp GWOS_configs/ld_Makefile.am src/binutils/ld/Makefile.am; \
-#	make -C src/binutils/ld
-	cd ./src/build-binutils; \
-	../binutils/configure --target=$(TARGET) --prefix="$(PREFIX)" --with-sysroot --disable-nls --disable-werror; \
-	make; \
-	echo $(PWD); \
-	make install
-	cd ./src/binutils; \
-	git restore .
+patch:
+	cd ./src/binutils/ && git apply ../../GWOS_configs/binutils_gwos.patch
 
+patch_docker:
+	cd ./build_docker && docker build -t gwos_toolchain .
+	docker run -v ./src/binutils/:/binutils gwos_toolchain
+
+binutils-gwos:
+	TARGET=i386-gwos
+	cd ./src; \
+	mkdir -p build-binutils; \
+	rm -rf build-binutils/*; \
+	cd build-binutils; \
+	../binutils/configure --target=i386-gwos --prefix="$(PREFIX)" --with-sysroot --disable-nls --disable-werror; \
+	make -j 8; \
+	make install; \
+	cd ..; \
+	cd ..
 
 build: env binutils-i386 gcc-i386
 
