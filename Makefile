@@ -33,7 +33,7 @@ clean:
 	rm -rf ./src/build-gcc
 
 patch:
-	cd ./src/binutils/ && git apply ../../GWOS_configs/binutils_gwos.patch
+	-cd ./src/binutils/ && git apply ../../GWOS_configs/binutils_gwos.patch
 
 patch_docker:
 	cd ./patch_docker && docker build -t gwos_patch .
