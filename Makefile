@@ -4,23 +4,21 @@ env:
 	./.env
 
 binutils-i386:
-	TARGET=i386-elf
 	cd ./src; \
 	mkdir -p build-binutils; \
 	rm -rf build-binutils/*; \
 	cd build-binutils; \
-	../binutils/configure --target=$(TARGET) --prefix="$(PREFIX)" --with-sysroot --disable-nls --disable-werror; \
+	../binutils/configure --target=i386-elf --prefix="$(PREFIX)" --with-sysroot --disable-nls --disable-werror; \
 	make -j 8; \
 	make install; \
 	cd ..; \
 	cd ..
 
 gcc-i386:
-	TARGET=i386-elf
 	cd ./src; \
 	mkdir -p build-gcc; \
 	cd build-gcc; \
-	../gcc/configure --target=$(TARGET) --prefix="$(PREFIX)" --disable-nls --enable-languages=c,c++ --without-headers --disable-hosted-libstdcxx; \
+	../gcc/configure --target=i386-elf --prefix="$(PREFIX)" --disable-nls --enable-languages=c,c++ --without-headers --disable-hosted-libstdcxx; \
 	make all-gcc -j 8; \
 	make all-target-libgcc -j 8; \
 	make all-target-libstdc++-v3 -j 8; \
@@ -53,6 +51,6 @@ binutils-gwos:
 	cd ..; \
 	cd ..
 
-build: env binutils-i386 gcc-i386
+build: env patch binutils-i386 gcc-i386 binutils-gwos
 
 default: build
