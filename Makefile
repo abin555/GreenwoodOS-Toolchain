@@ -17,6 +17,7 @@ binutils-i386:
 gcc-i386:
 	cd ./src; \
 	mkdir -p build-gcc; \
+	rm -rf build-gcc/*; \
 	cd build-gcc; \
 	../gcc/configure --target=i386-elf --prefix="$(PREFIX)" --disable-nls --enable-languages=c,c++ --without-headers --disable-hosted-libstdcxx; \
 	make all-gcc -j 8; \
@@ -53,6 +54,19 @@ binutils-gwos:
 	make install; \
 	cd ..; \
 	cd ..
+
+gcc-gwos:
+	cd ./src; \
+	mkdir -p build-gcc; \
+	rm -rf build-gcc/*; \
+	cd build-gcc; \
+	../gcc/configure --target=i386-gwos --prefix="$(PREFIX)" --disable-nls --enable-languages=c,c++ --disable-hosted-libstdcxx --with-sysroot=$(PWD)/../filesystem/; \
+	cd src/build-gcc; make all-gcc -j 8
+	cd src/build-gcc; make all-target-libgcc -j 8
+	cd src/build-gcc; make all-target-libstdc++-v3 -j 8
+	cd src/build-gcc; make install-gcc
+	cd src/build-gcc; make install-target-libgcc
+	cd src/build-gcc; make install-target-libstdc++-v3
 
 build: env patch binutils-i386 gcc-i386 binutils-gwos
 
