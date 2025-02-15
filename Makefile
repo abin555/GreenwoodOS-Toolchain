@@ -35,6 +35,7 @@ clean:
 
 patch:
 	-cd ./src/binutils/ && git apply ../../GWOS_configs/binutils_gwos.patch
+	-cd ./src/gcc/ && git apply ../../GWOS_configs/gcc_gwos.patch
 
 patch_docker:
 	cd ./patch_docker && docker build -t gwos_patch .
@@ -68,6 +69,6 @@ gcc-gwos:
 	cd src/build-gcc; make install-target-libgcc
 	cd src/build-gcc; make install-target-libstdc++-v3
 
-build: env patch binutils-i386 gcc-i386 binutils-gwos
+build: env patch binutils-i386 gcc-i386 binutils-gwos gcc-gwos
 
 default: build
