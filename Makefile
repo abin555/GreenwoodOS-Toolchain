@@ -61,7 +61,7 @@ gcc-gwos:
 	mkdir -p build-gcc; \
 	rm -rf build-gcc/*; \
 	cd build-gcc; \
-	../gcc/configure --target=i386-gwos --prefix="$(PREFIX)" --disable-nls --enable-languages=c,c++ --disable-hosted-libstdcxx --with-sysroot=$(PWD)/../filesystem/; \
+	../gcc/configure --target=i386-gwos --prefix="$(PREFIX)" --disable-nls --enable-languages=c --disable-hosted-libstdcxx --with-sysroot=$(PWD)/../filesystem/; \
 	cd src/build-gcc; make all-gcc -j 8
 	cd src/build-gcc; make all-target-libgcc -j 8
 	cd src/build-gcc; make all-target-libstdc++-v3 -j 8
@@ -69,6 +69,6 @@ gcc-gwos:
 	cd src/build-gcc; make install-target-libgcc
 	cd src/build-gcc; make install-target-libstdc++-v3
 
-build: env patch binutils-i386 gcc-i386 binutils-gwos gcc-gwos
+build: binutils-i386 gcc-i386 binutils-gwos gcc-gwos
 
 default: build
