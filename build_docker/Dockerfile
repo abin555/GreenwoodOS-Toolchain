@@ -19,7 +19,7 @@ RUN apt-get remove -y autotools-dev
 
 RUN mkdir /deps
 
-COPY ../docker_deps/*.deb /deps/
+COPY ./docker_deps /deps
 
 RUN dpkg -i /deps/autotools*.deb
 RUN dpkg -i /deps/autoconf*.deb

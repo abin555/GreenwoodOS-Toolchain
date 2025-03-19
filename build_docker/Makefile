@@ -1,7 +1,5 @@
-PREFIX:="$(HOME)/opt/cross"
-
-env:
-	./.env
+PREFIX:="/cross"
+SYSROOT="/gwosroot/"
 
 binutils-i386:
 	cd ./src; \
@@ -29,21 +27,6 @@ gcc-i386:
 	cd ..; \
 	cd ..
 
-clean:
-	rm -rf ./src/build-binutils
-	rm -rf ./src/build-gcc
-
-patch:
-	-cd ./src/binutils/ && git apply ../../GWOS_configs/binutils_gwos.patch
-	-cd ./src/gcc/ && git apply ../../GWOS_configs/gcc_gwos.patch
-
-patch_docker:
-	cd ./patch_docker && docker build -t gwos_patch .
-	docker run -v ./src/binutils/:/binutils gwos_patch
-
-build_toolchain_image:
-	cd ./build_docker && docker build -t gwos_toolchain_build .
-
 binutils-gwos:
 	TARGET=i386-gwos
 	cd ./src; \
@@ -61,7 +44,7 @@ gcc-gwos:
 	mkdir -p build-gcc; \
 	rm -rf build-gcc/*; \
 	cd build-gcc; \
-	../gcc/configure --target=i386-gwos --prefix="$(PREFIX)" --disable-nls --enable-languages=c --disable-hosted-libstdcxx --with-sysroot=$(PWD)/../filesystem/; \
+	../gcc/configure --target=i386-gwos --prefix="$(PREFIX)" --disable-nls --enable-languages=c --disable-hosted-libstdcxx --with-sysroot=${RSYSROOT} --with-build-sysroot=$(SYSROOT); \
 	cd src/build-gcc; make all-gcc -j 8
 	cd src/build-gcc; make all-target-libgcc -j 8
 	cd src/build-gcc; make all-target-libstdc++-v3 -j 8
@@ -69,11 +52,4 @@ gcc-gwos:
 	cd src/build-gcc; make install-target-libgcc
 	cd src/build-gcc; make install-target-libstdc++-v3
 
-build_local: binutils-i386 gcc-i386 binutils-gwos gcc-gwos
-
-default: build
-
-build_docker: build_toolchain_image
-	docker run -e RSYSROOT="$(PWD)/../filesystem/" -v $(PREFIX):/cross -v $(PWD)/../filesystem/:/gwosroot/ -v./src:/src -v./build_docker/Makefile:/Makefile gwos_toolchain_build make build
-
-build: build_docker
+build: binutils-i386 gcc-i386 binutils-gwos gcc-gwos

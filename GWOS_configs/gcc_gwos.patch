@@ -22,7 +22,7 @@ index df90720b716..a2faa00dc3c 100755
 +    *-gwos* | \
 +    *-*-gwos* | \
      i?86-*-cygwin* | \
-     *-mingw32* | \
+     i?86-*-mingw32* | \
      powerpc-*-eabisim* | \
 diff --git a/gcc/config.gcc b/gcc/config.gcc
 index 95c91ee02be..88c4a1fd5a7 100644
